@@ -43,7 +43,7 @@ namespace TaskProject.Controllers
             return await _context.Tasks.ToListAsync();
         }
         [HttpGet("ExcelTasks")]
-        public async Task<ActionResult<IEnumerable<Model.Task>>> ExcelTasks(Excellist Excel)
+        public async Task<ActionResult<IEnumerable<Model.Task>>> ExcelTasks()
         {
             var Tasks=_task.GetTasks();
             using (XLWorkbook wb = new XLWorkbook())
@@ -52,11 +52,7 @@ namespace TaskProject.Controllers
                 var sheet2 = wb.AddWorksheet(Tasks,"Tasks");
 
                 wb.SaveAs("FILES/Tasks.xlsx");
-                if (!string.IsNullOrEmpty(Excel.email))
-                {
-                    var message = new Mailservice.Message(new string[] { Excel.email }, "list of task", "<h1>" + "please find the attachment with list of tasks"+ "</h1>", "FILES/Tasks.xlsx");
-                    _sender.SendEmail(message);
-                }
+               
                 
                 using (MemoryStream ms = new MemoryStream())
                 {
